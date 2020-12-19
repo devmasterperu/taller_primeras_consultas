@@ -111,3 +111,83 @@ where color='Black' or ProductID=680
 
 select ProductID,color,size from SalesLT.Product
 where NOT(color='Black' and ProductID=680)
+
+select ProductID,color,size from SalesLT.Product
+where NOT(color='Black') or NOT(ProductID=680)
+
+select ProductID,color,size from SalesLT.Product
+where color='Black' or color='Red' or color='White'
+or color='Yellow'
+
+select ProductID,color,size from SalesLT.Product
+where color in ('Black','Red','White','Yellow')
+
+select AddressID,AddressLine1,ModifiedDate
+from SalesLT.Address
+where ModifiedDate between '2005-07-31' and '2005-12-31'
+order by ModifiedDate asc
+
+--Direcciones que inicien con LAKE
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like 'LAKE%'
+
+--Direcciones que contengan LAKE(Inicio,medio,final)
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like '%LAKE%'
+
+--Direcciones que finalizan con LAKE
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like '%LAKE'
+
+--Direcciones que inicien y finalicen con E
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like 'E%E'
+
+--Direcciones cuya segunda letra sea una 'U'
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like '_U%'
+
+--Direcciones cuya antepenúltima letra sea una 'U'
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like '%U__'
+
+--Direcciones cuya segunda letra sea una 'U' y
+--la cuarta letra sea 'E'
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like '_U_E%'
+
+--Direcciones cuya inicial es una vocal
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like '[aeiou]%'
+
+--Direcciones que finalizan en una vocal
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like '%[aeiou]'
+
+--Direcciones que inician y finalizan en una vocal
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like '[aeiou]%[aeiou]'
+
+--Direcciones que inician con una vocal y terminan
+--entre s y z.
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like '[aeiou]%[s-z]'
+
+select concat(FirstName,' ',LastName) 
+from SalesLT.Customer
+where concat(FirstName,' ',LastName) like '%AM%'
+
+--Direcciones que inician con una vocal y NO terminan
+--entre s y z.
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like '[aeiou]%[^s-z]'
+
+--Direcciones que NO inician con una vocal y terminan
+--entre s y z.
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like '[^aeiou]%[s-z]'
+
+--Direcciones que NO inician con una vocal y contengan
+--entre s y z en la penúltima posición.
+select AddressLine1 from SalesLT.Address
+where AddressLine1 like '[^aeiou]%[s-z]_'

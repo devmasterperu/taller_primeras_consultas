@@ -191,3 +191,74 @@ where AddressLine1 like '[^aeiou]%[s-z]'
 --entre s y z en la penúltima posición.
 select AddressLine1 from SalesLT.Address
 where AddressLine1 like '[^aeiou]%[s-z]_'
+
+/*Filtrado con TOP*/
+--Los 6 primeros basado en ListPrice mayor a menor
+SELECT top(6) ProductID,ListPrice from SalesLT.Product
+order by ListPrice desc
+--Los 6 primeros incluyendo empates 6° posición
+--basado en ListPrice mayor a menor
+SELECT top(6) with ties ProductID,ListPrice 
+from SalesLT.Product
+order by ListPrice desc
+--El 6% basado en ListPrice mayor a menor
+--select count(*) from SalesLT.Product:295
+SELECT top(6) percent --6% de 295=18
+ProductID,ListPrice from SalesLT.Product
+order by ListPrice desc
+--El 6% basado incluyendo empates con la última posición
+--del primer 6%, basado en ListPrice mayor a menor
+SELECT top(6) percent with ties--6% de 295=18
+ProductID,ListPrice from SalesLT.Product
+order by ListPrice desc
+
+--Paginas de 20 filas.
+--1° página (Posición 1-20)
+select Name,ProductID from SalesLT.Product
+order by Name asc
+offset 0 ROWS
+fetch next 20 rows only
+
+--2° página (Posición 21-40)
+select Name,ProductID from SalesLT.Product
+order by Name asc
+offset 20 ROWS
+fetch next 20 rows only
+
+--n° página (Tamaño t)
+declare @n int=2,@t int=20
+
+select Name,ProductID from SalesLT.Product
+order by Name asc
+offset (@n-1)*@t ROWS
+fetch next @t rows only
+
+create procedure usp_Pagina(@n int,@t int)
+as
+BEGIN
+    select Name,ProductID from SalesLT.Product
+    order by Name asc
+    offset (@n-1)*@t ROWS
+    fetch next @t rows only
+end
+
+execute usp_Pagina 2,20
+
+/*Función sumarización*/
+
+select count(ListPrice) as total,
+sum(ListPrice) as f1,
+avg(ListPrice) as f2,
+min(ListPrice) as f3,
+max(ListPrice) as f4
+from SalesLT.Product
+go
+select ProductCategoryID,color,
+count(ListPrice) as total,
+sum(ListPrice) as f1,
+avg(ListPrice) as f2,
+min(ListPrice) as f3,
+max(ListPrice) as f4
+from SalesLT.Product
+group by ProductCategoryID,Color
+order by ProductCategoryID,Color
